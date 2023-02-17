@@ -1,9 +1,17 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
+	"errors"
 	"net/http"
 	"sync/atomic"
+
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	MaxUsernameLength = 32
+	MaxPasswordLength = 32
+	MinPasswordLength = 6
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -32,9 +40,38 @@ type UserResponse struct {
 	User User `json:"user"`
 }
 
+// Register funtions
+
+func checkAccountLen(username, password string) error {
+	// println(len(username), len(password))
+	if username == "" {
+		return errors.New("用户名为空")
+	}
+	if len(username) > MaxUsernameLength {
+		return errors.New("用户名长度超出限制")
+	}
+	if password == "" {
+		return errors.New("密码为空")
+	}
+	if len(password) > MaxPasswordLength {
+		return errors.New("密码长度超出限制")
+	}
+	if len(password) < MinPasswordLength {
+		return errors.New("密码长度过短")
+	}
+	return nil
+}
+
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
+	// println(username, password)
+	if err := checkAccountLen(username, password); err != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: err.Error()},
+		})
+		return
+	}
 
 	token := username + password
 
