@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"log"
 	"strings"
+
+	"github.com/BurntSushi/toml"
 )
 
 type Mysql struct {
@@ -43,9 +44,9 @@ type Config struct {
 
 var Info Config
 
-//包初始化加载时候会调用的函数
+// 包初始化加载时候会调用的函数
 func init() {
-	if _, err := toml.DecodeFile("D:\\GOLandPRo\\douyin_pro\\byte_douyin_project\\config\\config.toml", &Info); err != nil {
+	if _, err := toml.DecodeFile("D:\\Projects\\simple-tiktok\\config\\config.toml", &Info); err != nil {
 		panic(err)
 	}
 	//去除左右的空格

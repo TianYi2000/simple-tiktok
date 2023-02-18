@@ -3,7 +3,6 @@ package controller
 import (
 	"errors"
 	"net/http"
-	"sync/atomic"
 
 	"github.com/gin-gonic/gin"
 )
@@ -60,61 +59,6 @@ func checkAccountLen(username, password string) error {
 		return errors.New("密码长度过短")
 	}
 	return nil
-}
-
-func updateAccount(username, password string) error {
-
-}
-
-func Register(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-	// println(username, password)
-	if err := checkAccountLen(username, password); err != nil {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: err.Error()},
-		})
-		return
-	}
-
-	token := username + password
-
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
-		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := User{
-			Id:   userIdSequence,
-			Name: username,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
-		})
-	}
-}
-
-func Login(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
-	}
 }
 
 func UserInfo(c *gin.Context) {
