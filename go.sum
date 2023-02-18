@@ -1,3 +1,5 @@
+github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak=
+github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/TianYi2000/simple-tiktok v0.0.0-20230109111057-5031aee01508 h1:a/qP2Tp/rJShjC5z2QRS127Mz772K9ZFYGjhiV8k8FA=
 github.com/TianYi2000/simple-tiktok v0.0.0-20230109111057-5031aee01508/go.mod h1:XMO1NCRwu+8CnhAGPnCR+YgZPzl1kHER/d69V564Af0=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=

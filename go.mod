@@ -3,13 +3,13 @@ module github.com/TianYi2000/simple-tiktok
 go 1.17
 
 require (
-	github.com/TianYi2000/simple-tiktok v0.0.0-20230109111057-5031aee01508
 	github.com/gavv/httpexpect/v2 v2.8.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/stretchr/testify v1.8.1
 )
 
 require (
+	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

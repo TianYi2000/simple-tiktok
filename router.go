@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/TianYi2000/simple-tiktok/controller"
+	"github.com/TianYi2000/simple-tiktok/controller/user_account"
 	"github.com/TianYi2000/simple-tiktok/models"
 	"github.com/gin-gonic/gin"
 )
@@ -16,8 +17,8 @@ func initRouter(r *gin.Engine) {
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
 	apiRouter.GET("/user/", controller.UserInfo)
-	apiRouter.POST("/user/register/", controller.Register)
-	apiRouter.POST("/user/login/", controller.Login)
+	apiRouter.POST("/user/register/", user_account.UserRegisterHandler)
+	apiRouter.POST("/user/login/", user_account.UserLoginHandler)
 	apiRouter.POST("/publish/action/", controller.Publish)
 	apiRouter.GET("/publish/list/", controller.PublishList)
 
