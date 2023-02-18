@@ -62,6 +62,10 @@ func checkAccountLen(username, password string) error {
 	return nil
 }
 
+func updateAccount(username, password string) error {
+
+}
+
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
