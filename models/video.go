@@ -76,6 +76,7 @@ func (v *VideoDAO) QueryVideoListByUserId(userId int64, videoList *[]*Video) err
 
 // QueryVideoListByLimitAndTime  返回按投稿时间倒序的视频列表，并限制为最多limit个
 func (v *VideoDAO) QueryVideoListByLimitAndTime(limit int, latestTime time.Time, videoList *[]*Video) error {
+	// println("limit", limit)
 	if videoList == nil {
 		return errors.New("QueryVideoListByLimit videoList 空指针")
 	}
