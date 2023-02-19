@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -37,28 +36,6 @@ type UserLoginResponse struct {
 type UserResponse struct {
 	Response
 	User User `json:"user"`
-}
-
-// Register funtions
-
-func checkAccountLen(username, password string) error {
-	// println(len(username), len(password))
-	if username == "" {
-		return errors.New("用户名为空")
-	}
-	if len(username) > MaxUsernameLength {
-		return errors.New("用户名长度超出限制")
-	}
-	if password == "" {
-		return errors.New("密码为空")
-	}
-	if len(password) > MaxPasswordLength {
-		return errors.New("密码长度超出限制")
-	}
-	if len(password) < MinPasswordLength {
-		return errors.New("密码长度过短")
-	}
-	return nil
 }
 
 func UserInfo(c *gin.Context) {
