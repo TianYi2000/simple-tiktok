@@ -62,7 +62,7 @@ func (q *QueryFeedVideoListFlow) checkNum() {
 	}
 }
 
-func FillVideoListFields(userId int64, videos *[]*models.Video) (*time.Time, error) {
+func FillVideoListFields(videos *[]*models.Video) (*time.Time, error) {
 	size := len(*videos)
 	if videos == nil || size == 0 {
 		return nil, errors.New("util.FillVideoListFields videos为空")
@@ -77,10 +77,7 @@ func (q *QueryFeedVideoListFlow) prepareData() error {
 	if err != nil {
 		return err
 	}
-	//如果用户为登录状态，则更新该视频是否被该用户点赞的状态
-	latestTime, _ := FillVideoListFields(q.userId, &q.videos) //不是致命错误，不返回
-
-	//准备好时间戳
+	latestTime, _ := FillVideoListFields(&q.videos)
 	if latestTime != nil {
 		q.nextTime = (*latestTime).UnixNano() / 1e6
 		return nil
@@ -103,36 +100,23 @@ type FeedResponse struct {
 }
 
 func Feed(c *gin.Context) {
-	p := NewProxyFeedVideoList(c)
-	token, ok := c.GetQuery("token")
-	//无登录状态
-	if !ok {
-		err := p.DoNoToken()
-		if err != nil {
-			p.FeedVideoListError(err.Error())
-		}
-		return
-	}
-
-	//有登录状态(先按无登录状态处理)
-	println(token)
-	// err := p.DoHasToken(token)
-	err := p.DoNoToken()
+	p := NewVideoList(c)
+	err := p.Get()
 	if err != nil {
 		p.FeedVideoListError(err.Error())
 	}
+	return
 }
 
-type ProxyFeedVideoList struct {
+type VideoList struct {
 	*gin.Context
 }
 
-func NewProxyFeedVideoList(c *gin.Context) *ProxyFeedVideoList {
-	return &ProxyFeedVideoList{Context: c}
+func NewVideoList(c *gin.Context) *VideoList {
+	return &VideoList{Context: c}
 }
 
-// DoNoToken 未登录的视频流推送处理
-func (p *ProxyFeedVideoList) DoNoToken() error {
+func (p *VideoList) Get() error {
 	rawTimestamp := p.Query("latest_time")
 	var latestTime time.Time
 	intTime, err := strconv.ParseInt(rawTimestamp, 10, 64)
@@ -148,18 +132,18 @@ func (p *ProxyFeedVideoList) DoNoToken() error {
 }
 
 // DoHasToken 如果是登录状态，则生成UserId字段
-func (p *ProxyFeedVideoList) DoHasToken(token string) error {
+func (p *VideoList) DoHasToken(token string) error {
 	return nil
 }
 
-func (p *ProxyFeedVideoList) FeedVideoListError(msg string) {
+func (p *VideoList) FeedVideoListError(msg string) {
 	p.JSON(http.StatusOK, FeedResponse{CommonResponse: models.CommonResponse{
 		StatusCode: 1,
 		StatusMsg:  msg,
 	}})
 }
 
-func (p *ProxyFeedVideoList) FeedVideoListOk(videoList *FeedVideoList) {
+func (p *VideoList) FeedVideoListOk(videoList *FeedVideoList) {
 	p.JSON(http.StatusOK, FeedResponse{
 		CommonResponse: models.CommonResponse{
 			StatusCode: 0,

@@ -4,19 +4,18 @@ import (
 	"net/http"
 
 	"github.com/TianYi2000/simple-tiktok/models"
-	"github.com/TianYi2000/simple-tiktok/service/user_account"
 	"github.com/gin-gonic/gin"
 )
 
 type UserLoginResponse struct {
 	models.CommonResponse
-	*user_account.LoginResponse
+	*AccountResponse
 }
 
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-	userLoginResponse, err := user_account.QueryUserLogin(username, password)
+	userLoginResponse, err := QueryUserLogin(username, password)
 
 	//用户不存在
 	if err != nil {
@@ -28,7 +27,7 @@ func Login(c *gin.Context) {
 
 	//用户存在
 	c.JSON(http.StatusOK, UserLoginResponse{
-		CommonResponse: models.CommonResponse{StatusCode: 0},
-		LoginResponse:  userLoginResponse,
+		CommonResponse:  models.CommonResponse{StatusCode: 0},
+		AccountResponse: userLoginResponse,
 	})
 }

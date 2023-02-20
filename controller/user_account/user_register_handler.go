@@ -9,13 +9,13 @@ import (
 
 type UserRegisterResponse struct {
 	models.CommonResponse
-	*LoginResponse
+	*AccountResponse
 }
 
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-	registerResponse, err := PostUserLogin(username, password)
+	registerResponse, err := AccountHandler(username, password)
 
 	if err != nil {
 		c.JSON(http.StatusOK, UserRegisterResponse{
@@ -27,7 +27,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, UserRegisterResponse{
-		CommonResponse: models.CommonResponse{StatusCode: 0},
-		LoginResponse:  registerResponse,
+		CommonResponse:  models.CommonResponse{StatusCode: 0},
+		AccountResponse: registerResponse,
 	})
 }
